@@ -29,15 +29,11 @@ namespace Application_VenteConsole.Pages.Manufacturers
                 return NotFound();
             }
 
-            var manufacturer = await _client.Manufacturer.FirstOrDefaultAsync(m => m.ManufacturerId == id);
+            Manufacturer = await _client.ManufacturersGETAsync(id.Value);
 
-            if (manufacturer == null)
+            if (Manufacturer == null)
             {
                 return NotFound();
-            }
-            else
-            {
-                Manufacturer = manufacturer;
             }
             return Page();
         }
@@ -48,15 +44,14 @@ namespace Application_VenteConsole.Pages.Manufacturers
             {
                 return NotFound();
             }
-
-            var manufacturer = await _client.Manufacturer.FindAsync(id);
-            if (manufacturer != null)
+            try
             {
-                Manufacturer = manufacturer;
-                _client.Manufacturer.Remove(Manufacturer);
-                await _client.SaveChangesAsync();
+                await _client.ManufacturersDELETEAsync(id.Value);
             }
-
+            catch (Exception ex)
+            {
+                return RedirectToPage("./Index");
+            }
             return RedirectToPage("./Index");
         }
     }

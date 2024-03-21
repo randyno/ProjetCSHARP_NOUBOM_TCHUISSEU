@@ -29,7 +29,7 @@ namespace Application_VenteConsole.Pages.Manufacturers
                 return NotFound();
             }
 
-            var manufacturer =  await _client.Manufacturer.FirstOrDefaultAsync(m => m.ManufacturerId == id);
+            var manufacturer = await _client.ManufacturersGETAsync(id.Value);
             if (manufacturer == null)
             {
                 return NotFound();
@@ -46,31 +46,21 @@ namespace Application_VenteConsole.Pages.Manufacturers
             {
                 return Page();
             }
-
-            _client.Attach(Manufacturer).State = EntityState.Modified;
-
             try
             {
-                await _client.SaveChangesAsync();
+                await _client.ManufacturersPUTAsync(Manufacturer.ManufacturerId, Manufacturer);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!ManufacturerExists(Manufacturer.ManufacturerId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return RedirectToPage("./Index");
             }
-
             return RedirectToPage("./Index");
         }
 
-        private bool ManufacturerExists(int id)
+        /*
+         private bool ManufacturerExists(int id)
         {
             return _client.Manufacturer.Any(e => e.ManufacturerId == id);
-        }
+        }*/
     }
 }

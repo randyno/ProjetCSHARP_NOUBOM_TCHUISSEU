@@ -34,10 +34,14 @@ namespace Application_VenteConsole.Pages.Manufacturers
             {
                 return Page();
             }
-
-            _client.Manufacturer.Add(Manufacturer);
-            await _client.SaveChangesAsync();
-
+            try
+            {
+                await _client.ManufacturersPOSTAsync(Manufacturer);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToPage("./Index");
+            }
             return RedirectToPage("./Index");
         }
     }

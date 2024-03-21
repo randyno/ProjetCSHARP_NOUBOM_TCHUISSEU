@@ -28,14 +28,11 @@ namespace Application_VenteConsole.Pages.Manufacturers
                 return NotFound();
             }
 
-            var manufacturer = await _client.Manufacturer.FirstOrDefaultAsync(m => m.ManufacturerId == id);
-            if (manufacturer == null)
+            Manufacturer = await _client.ManufacturersGETAsync(id.Value);
+
+            if (Manufacturer == null)
             {
                 return NotFound();
-            }
-            else
-            {
-                Manufacturer = manufacturer;
             }
             return Page();
         }
