@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using VentesConsole.Data;
-using VentesConsole.Models;
+using Application_VenteConsole.API;
+
 
 namespace Application_VenteConsole.Pages.Manufacturers
 {
     public class DetailsModel : PageModel
     {
-        private readonly VentesConsole.Data.VentesConsoleContext _context;
+        private readonly IManufacturerClient _client;
 
-        public DetailsModel(VentesConsole.Data.VentesConsoleContext context)
+        public DetailsModel(IManufacturerClient client)
         {
-            _context = context;
+            _client = client;
         }
 
         public Manufacturer Manufacturer { get; set; } = default!;
@@ -28,7 +28,7 @@ namespace Application_VenteConsole.Pages.Manufacturers
                 return NotFound();
             }
 
-            var manufacturer = await _context.Manufacturer.FirstOrDefaultAsync(m => m.ManufacturerId == id);
+            var manufacturer = await _client.Manufacturer.FirstOrDefaultAsync(m => m.ManufacturerId == id);
             if (manufacturer == null)
             {
                 return NotFound();

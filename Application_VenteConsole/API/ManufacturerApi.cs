@@ -176,10 +176,12 @@ namespace Application_VenteConsole.API
         public ManufacturerClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
-            var settings = new Newtonsoft.Json.JsonSerializerSettings();
-            UpdateJsonSerializerSettings(settings);
-            return settings;
+            _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(()=>
+            {
+                var settings = new Newtonsoft.Json.JsonSerializerSettings();
+                UpdateJsonSerializerSettings(settings);
+                return settings;
+            });
         }
 
         private Newtonsoft.Json.JsonSerializerSettings CreateSerializerSettings()

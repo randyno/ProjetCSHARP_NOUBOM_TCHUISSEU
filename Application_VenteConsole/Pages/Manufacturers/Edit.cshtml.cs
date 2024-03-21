@@ -6,18 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using VentesConsole.Data;
-using VentesConsole.Models;
+using Application_VenteConsole.API;
 
 namespace Application_VenteConsole.Pages.Manufacturers
 {
     public class EditModel : PageModel
     {
-        private readonly VentesConsole.Data.VentesConsoleContext _context;
+        private readonly IManufacturerClient _client;
 
-        public EditModel(VentesConsole.Data.VentesConsoleContext context)
+        public EditModel(IManufacturerClient client)
         {
-            _context = context;
+            _client = client;
         }
 
         [BindProperty]
@@ -30,7 +29,7 @@ namespace Application_VenteConsole.Pages.Manufacturers
                 return NotFound();
             }
 
-            var manufacturer =  await _context.Manufacturer.FirstOrDefaultAsync(m => m.ManufacturerId == id);
+            var manufacturer =  await _client.Manufacturer.FirstOrDefaultAsync(m => m.ManufacturerId == id);
             if (manufacturer == null)
             {
                 return NotFound();
@@ -48,11 +47,11 @@ namespace Application_VenteConsole.Pages.Manufacturers
                 return Page();
             }
 
-            _context.Attach(Manufacturer).State = EntityState.Modified;
+            _client.Attach(Manufacturer).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _client.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -71,7 +70,7 @@ namespace Application_VenteConsole.Pages.Manufacturers
 
         private bool ManufacturerExists(int id)
         {
-            return _context.Manufacturer.Any(e => e.ManufacturerId == id);
+            return _client.Manufacturer.Any(e => e.ManufacturerId == id);
         }
     }
 }

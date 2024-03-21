@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using VentesConsole.Data;
-using VentesConsole.Models;
+using Application_VenteConsole.API;
+
 
 namespace Application_VenteConsole.Pages.Manufacturers
 {
     public class DeleteModel : PageModel
     {
-        private readonly VentesConsole.Data.VentesConsoleContext _context;
+        private readonly IManufacturerClient _client;
 
-        public DeleteModel(VentesConsole.Data.VentesConsoleContext context)
+        public DeleteModel(IManufacturerClient client)
         {
-            _context = context;
+            _client = client;
         }
 
         [BindProperty]
@@ -29,7 +29,7 @@ namespace Application_VenteConsole.Pages.Manufacturers
                 return NotFound();
             }
 
-            var manufacturer = await _context.Manufacturer.FirstOrDefaultAsync(m => m.ManufacturerId == id);
+            var manufacturer = await _client.Manufacturer.FirstOrDefaultAsync(m => m.ManufacturerId == id);
 
             if (manufacturer == null)
             {
@@ -49,12 +49,12 @@ namespace Application_VenteConsole.Pages.Manufacturers
                 return NotFound();
             }
 
-            var manufacturer = await _context.Manufacturer.FindAsync(id);
+            var manufacturer = await _client.Manufacturer.FindAsync(id);
             if (manufacturer != null)
             {
                 Manufacturer = manufacturer;
-                _context.Manufacturer.Remove(Manufacturer);
-                await _context.SaveChangesAsync();
+                _client.Manufacturer.Remove(Manufacturer);
+                await _client.SaveChangesAsync();
             }
 
             return RedirectToPage("./Index");

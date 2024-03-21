@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using VentesConsole.Data;
-using VentesConsole.Models;
+using Application_VenteConsole.API;
+
 
 namespace Application_VenteConsole.Pages.Manufacturers
 {
     public class CreateModel : PageModel
     {
-        private readonly VentesConsole.Data.VentesConsoleContext _context;
+        private readonly IManufacturerClient _client;
 
-        public CreateModel(VentesConsole.Data.VentesConsoleContext context)
+        public CreateModel(IManufacturerClient client)
         {
-            _context = context;
+            _client = client;
         }
 
         public IActionResult OnGet()
@@ -35,8 +35,8 @@ namespace Application_VenteConsole.Pages.Manufacturers
                 return Page();
             }
 
-            _context.Manufacturer.Add(Manufacturer);
-            await _context.SaveChangesAsync();
+            _client.Manufacturer.Add(Manufacturer);
+            await _client.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }

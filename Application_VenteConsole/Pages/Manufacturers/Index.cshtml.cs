@@ -2,28 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application_VenteConsole.API;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using VentesConsole.Data;
-using VentesConsole.Models;
+
+
 
 namespace Application_VenteConsole.Pages.Manufacturers
 {
     public class IndexModel : PageModel
     {
-        private readonly VentesConsole.Data.VentesConsoleContext _context;
+        private readonly IManufacturerClient _client;
 
-        public IndexModel(VentesConsole.Data.VentesConsoleContext context)
+        public IndexModel(IManufacturerClient client)
         {
-            _context = context;
+            _client = client;
         }
 
         public IList<Manufacturer> Manufacturer { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Manufacturer = await _context.Manufacturer.ToListAsync();
+            Manufacturer = (await _client.ManufacturersAllAsync()).ToList();
         }
     }
 }
