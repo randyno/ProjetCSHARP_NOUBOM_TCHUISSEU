@@ -169,7 +169,7 @@ namespace Application_VenteConsole.API
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class ManufacturerClient : IManufacturerClient
     {
-        private string _baseUrl = "http://localhost:5020";
+        private string _baseUrl = "https://ventesconsole20240322124702.azurewebsites.net/";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
